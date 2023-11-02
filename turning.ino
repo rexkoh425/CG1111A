@@ -1,4 +1,3 @@
-
 void turn(char* direction){
 
   if (direction == "left") {
@@ -68,34 +67,47 @@ void turn_function()
 	turn(180);
 
   } else if (colour == "purple") {
-
-  
 	turn("left");
-	left_motor.run(-MOVE_SPEED);
-  right_motor.run(MOVE_SPEED);
-	delay(2000);
+	for (int turn_speed = 0; turn_speed <= 240; turn_speed += 3)
+	{
+	    left_motor.run(-turn_speed);
+	    right_motor.run(turn_speed);
+	    delay(4);
+	}
+	left_motor.run(-240);
+	right_motor.run(240);
+	delay(500);
+	for (int turn_speed = 240; turn_speed >= 0; turn_speed -= 3)
+	{
+	    left_motor.run(-turn_speed);
+	    right_motor.run(turn_speed);
+	    delay(4);
+	}
 	turn("left");
-   
-
   } else if (colour == "light blue") {
-
-    
 	turn("right");
-	left_motor.run(MOVE_SPEED);
-  right_motor.run(MOVE_SPEED);
-	delay(2000);
+	for (int turn_speed = 0; turn_speed <= 240; turn_speed += 3)
+	{
+	    left_motor.run(-turn_speed);
+	    right_motor.run(turn_speed);
+	    delay(4);
+	}
+	left_motor.run(-240);
+	right_motor.run(240);
+	delay(500);
+	for (int turn_speed = 240; turn_speed >= 0; turn_speed -= 3)
+	{
+	    left_motor.run(-turn_speed);
+	    right_motor.run(turn_speed);
+	    delay(4);
+	}
 	turn("right");
-  
-
   } else {
 
   stop();
 	//play_victory_tune();
 	delay(10000);
-  
   }
-
-  delay(1000);//stop after turn 
 }
 
 
