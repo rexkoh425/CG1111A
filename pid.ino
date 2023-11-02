@@ -1,5 +1,4 @@
 
-
 float get_ultrasonic_distance() {
 
   
@@ -44,7 +43,7 @@ int motor_deviation(){
   
   float dist_from_wall = get_ultrasonic_distance();
 
-  if(dist_from_wall <= 0 || dist_from_wall > 15){
+  if(dist_from_wall <= 0 || dist_from_wall > 14.5){
 
     previous_error = 0.0;
     return 0;
@@ -52,15 +51,15 @@ int motor_deviation(){
    
   float error = dist_from_wall - MID_POINT ;
   float change_in_error = error - previous_error;
-  float change2_in_error = change_in_error - previous_change_in_error;
   
-  float total_error = Kp*error +  Kd * (change_in_error);  // actual
-  previous_error = error;
-  previous_change_in_error = change_in_error;
+  
+  if(mod(change_in_error) > 2){
 
-  if(change2_in_error > 0){// need think about this logic
-    return 0;
+    factor = 2.6;
   }
+  
+  float total_error = (Kp*error +  Kd * (change_in_error))/factor;  // actual
+  previous_error = error;
 
   return limit_correction(total_error);//added this
 }
@@ -80,8 +79,4 @@ void move_forward(int error) {
   right_motor.run(MOVE_SPEED - RIGHT_DEVIATION - right_correction);
   
 }
-
-
-
-
 
