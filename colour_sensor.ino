@@ -51,6 +51,9 @@ void readColourSensor()
     digitalWrite(D2, LOW);
     delay(RGBWait);
   }
+  led.setColor(currentColour[0], currentColour[1], currentColour[2]);
+  led.show();
+  delay(1000);
 
   // runs the following code if DEBUG_COLOUR is #defined 
   #ifndef DEBUG_COLOUR
