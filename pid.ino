@@ -16,7 +16,7 @@ float get_ultrasonic_distance() {
   float conversion = 100.0 / 1000000.0;
   float distance_cm = duration * SPEED_OF_SOUND * 0.5 * conversion;
   
-  //Serial.println(distance_cm);
+ 
   return distance_cm;
 }
 
@@ -31,27 +31,32 @@ int limit_correction(float error){
   return error;
 }
 
+float mod(float change_in_error){
+
+  if(change_in_error < 0){
+    return 0 - change_in_error;
+  }
+  return change_in_error;
+}
+
 int motor_deviation(){
   
-  float dist_from_wall = get_ultrasonic_distance();
-  float factor =  1.0;
-
-  if(dist_from_wall <= 0 || dist_from_wall > 14){
-     return 0;
-  }
+  float dist_from_wall = filter_dist(get_ultrasonic_distance());
    
   float error = dist_from_wall - MID_POINT ;
   float change_in_error = error - previous_error;
-  
-  if(change_in_error > 3){
-    factor = 2.5;
-  }
-
-  float total_error = (Kp*error +  Kd * (change_in_error)) / factor;  // actual
+  float total_error = (Kp*error +  Kd * (change_in_error))/factor;  // actual
   previous_error = error;
 
+  if(dist_from_wall <= 0 || dist_from_wall > 14.0){
+
+    previous_error = 0.0;
+    return 0;
+  }
   return limit_correction(total_error);//added this
 }
+
+
 
 void move_forward(int error) { 
 
@@ -68,4 +73,7 @@ void move_forward(int error) {
   right_motor.run(MOVE_SPEED - RIGHT_DEVIATION - right_correction);
   
 }
+
+
+
 
