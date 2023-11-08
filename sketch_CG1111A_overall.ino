@@ -16,6 +16,8 @@
 #define D1 A2 
 #define D2 A3
 
+MeRGBLed led(0,30);
+
 #define DEBUG_COLOUR
 
 int balance[3][3] =
@@ -93,6 +95,7 @@ void setup() {
 
   pinMode(D1, OUTPUT);
   pinMode(D2, OUTPUT);
+  led.setpin(13);
   //setBalance();
   readFromEEPROM();
   delay(4000);
