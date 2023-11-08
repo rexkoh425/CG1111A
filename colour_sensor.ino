@@ -64,7 +64,6 @@ void readColourSensor()
   #endif
 }
 
-
 int getAvg()
 {
   int total = 0;
@@ -79,30 +78,86 @@ int getAvg()
   return total / NUM_AVG_READS;
 }
 
+void setBalance()
+{
+  String title[2] = { "White", "Black" };
+
+  for (int c = WHITE; c <= BLACK; c++) // from white to black
+  {
+    // instructions for calibration, prints countdown by lines
+    Serial.println("Put " + title[c] + " sample for calibration in: ");
+    for (int i = COUNTDOWN; i > 0; i--)
+    {
+      Serial.println(i);
+      delay(1000); 
+    }
+    Serial.println("");
+
+    // getting average RGB values
+    Serial.print(title[c] + ": ");
+    for (int i = 0; i < 3; i++) // from RED to BLUE
+    {
+      digitalWrite(D1, ledPins[i][0]);
+      digitalWrite(D2, ledPins[i][1]);
+      delay(RGBWait);
+
+      balance[c][i] = getAvg(); // saves avg RGB value to balance array
+
+      // LEDs off
+      digitalWrite(D1, LOW);
+      digitalWrite(D2, LOW);
+      delay(RGBWait);
+
+      Serial.print(balance[c][i]);
+
+      if (i < 2) // aesthetics
+      {
+        Serial.print(", ");
+      }
+    }
+    Serial.println("\n"); 
+  }
+
+  // finding GREY range (WHITE - BLACK)
+  Serial.print("GREY range: ");
+  for (int j = 0; j < 3; j++) // from RED to BLUE
+  {
+    balance[GREY][j] = balance[WHITE][j] - balance[BLACK][j];
+    Serial.print(balance[GREY][j]);
+
+    if (j < 2) // aesthetics
+    {
+      Serial.print(", ");
+    }
+  }
+  Serial.println("\n");
+}
+
 char *Colour_calc(int red, int green, int blue) {
- if (red > 230 && green > 230 && blue > 230)
+ if (red > 200 && green > 200 && blue > 200)
  {
   return "white";
  }
 
- if (red < 50 && green < 50 && blue < 50)
+ if (red < 80 && green < 80 && blue < 80)
  {
   return "black";
  }
  if(red > green){
 
-    if(green > blue){
+    if(green > 180){  // was 180
 
-      if(green > 110 && blue > 110){
+      if(green > blue){
 
         return "orange";
       }
-      return "red";
-
-    }else{
+    }
+    if (blue > green) {
 
       return "purple";
     }
+
+    return "red";
 
   }else if(blue > green){
 
