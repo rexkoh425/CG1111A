@@ -135,9 +135,12 @@ void setBalance()
   Serial.println("\n");
 }
 
-char *Colour_calc(int red, int green, int blue) {
- if (red > 200 && green > 200 && blue > 200)
+char *Colour_calc(int red, int green, int blue) 
+{
+ if (red > 230 && green > 230 && blue > 230)
  {
+  led.setColor(255, 255, 255);
+  led.show();
   return "white";
  }
 
@@ -145,30 +148,40 @@ char *Colour_calc(int red, int green, int blue) {
  {
   return "black";
  }
+
  if(red > green){
 
-    if(green > 180){  // was 180
-
-      if(green > blue){
-
+    if(green > blue)
+    {
+      if(green > 180)
+      {
+        led.setColor(255, 165, 0);
+        led.show();
         return "orange";
       }
+      led.setColor(255, 0, 0);
+      led.show();
+      return "red";
     }
-    if (blue > green) {
+ }
 
+  if(blue > green){
+
+    float ratio = (float) red / (float) blue;
+    //Serial.println(ratio);
+    if (ratio > float(0.9))
+    {
+      led.setColor(255, 0, 255);
+      led.show();
       return "purple";
     }
-
-    return "red";
-
-  }else if(blue > green){
-
-      return "blue";
-
-  }else{
-
-    return "green";
+    led.setColor(0, 0, 255);
+    led.show();
+    return "blue";
   }
+  led.setColor(0, 255, 0);
+  led.show();
+  return "green";
 }
 
 bool sense_black_strip() {
