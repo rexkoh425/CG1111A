@@ -28,13 +28,13 @@ void turn(char* direction){
     delay(2);
     }
   }else {//u turn
-    for (int turn_speed = 0; turn_speed <= 215; turn_speed += 1)
+    for (int turn_speed = 0; turn_speed <= 205; turn_speed += 1)
     {
     left_motor.run(turn_speed);
     right_motor.run(turn_speed);
     delay(4);
     }
-    for (int turn_speed = 215; turn_speed >= 0; turn_speed -= 1)
+    for (int turn_speed = 205; turn_speed >= 0; turn_speed -= 1)
     {
     left_motor.run(turn_speed);
     right_motor.run(turn_speed);
@@ -104,26 +104,6 @@ void turn_function()
 	    delay(4);
 	}
 	turn("right");
-
-  // Test new smooth turning (right)
-  /*
-  for (int turn_speed = 240; turn_speed > 0; turn_speed -= 3)
-	{
-	    left_motor.run(-turn_speed);
-	    right_motor.run(turn_speed);
-	    delay(4);
-	}
-	left_motor.run(-240);
-	right_motor.run(240);
-	delay(500);
-	for (int turn_speed = 240; turn_speed >= 0; turn_speed -= 3)
-	{
-	    left_motor.run(-turn_speed);
-	    right_motor.run(turn_speed);
-	    delay(4);
-	}
-  */
-
 
   } else if (colour == "white") {
   stop();

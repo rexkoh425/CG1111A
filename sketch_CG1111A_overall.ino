@@ -1,22 +1,29 @@
 #include <MeEEPROM.h>
 #include <MeMCore.h>
 
+/* possible improvements to timing
+
+add ir sensor to sense colour b4 sensing black strip
+decrease rgb wait of turning off rgb e.g the second rgb in the readcolour function
+increase turn speed / moving speed
+
+*/
 //colour sensor
 #define WHITE 0
 #define BLACK 1
 #define GREY 2
 
-#define RGBWait 200
+#define RGBWait 80
 #define LDRWait 10
 #define NUM_AVG_READS 5
 #define COUNTDOWN 5
 
-#define LDR 1
+#define LDR 0
 
 #define D1 A2 
 #define D2 A3
 
-#define DEBUG_COLOUR
+//#define DEBUG_COLOUR // to remove when runnning actual
 
 int balance[3][3] =
 {
@@ -51,23 +58,34 @@ int blue = 0;
 MeLineFollower lineFinder(PORT_2); // assigning lineFinder to RJ25 port 2
 MeDCMotor left_motor(M1);
 MeDCMotor right_motor(M2);
+
+#define turning_speed 255 //added all the variables compared to week 12-2
+const long unsigned int LEFT_ANGLE_MS = 330;
+const long unsigned int SECOND_LEFT_ANGLE_MS = 400;
+const long unsigned int RIGHT_ANGLE_MS = 280;
+const long unsigned int SECOND_RIGHT_ANGLE_MS = 320;
+const long unsigned int U_TURN_MS = 585;
+const long unsigned int DOUBLE_TURN_STRAIGHT_LEFT_MS = 740;// from 760
+const long unsigned int DOUBLE_TURN_STRAIGHT_RIGHT_MS = 550;//was 640
 //
 //PID
 #define TIMEOUT 2000   //to adjust timeout     
 #define SPEED_OF_SOUND 340  
 #define ULTRASONIC 12
 
-#define MOVE_SPEED 250
+#define MOVE_SPEED 255
 #define LEFT_DEVIATION 2
 #define RIGHT_DEVIATION 0 
 
-const float Kp = 20.0;               
-const float Kd = 500.0;//was 100
+const float Kp = 20.0;//was 20               
+const float Kd = 700.0;//was500
 const float MID_POINT = 7.0;
-float previous_error = 0.0 ;
-float factor = 1;
-float previous_filtered_dist = 0;
+float previous_error = 0.0;
+float previous_filtered_dist = 0.0;//was 0
+
+const int loop_time_ms = 5;
 //
+
 //music
 MeBuzzer buzzer;
 
@@ -86,9 +104,14 @@ int v3_durations_54[] = {beat, beat, 8 * beat, beat, beat, 8 * beat, beat, beat,
 int v3_durations_44[] = {beat, beat, 14 * beat, beat, beat, 14 * beat, beat, beat, 14 * beat, beat, beat};
 int delay_54 = 20 * beat;//was 20
 int delay_44 = 16 * beat;
-
 //
+
+//debug
 bool colour_sense = true;
+int start_time = 0;
+int end_time = 0;
+//
+
 
 //int k = 0 ; 
 //char** colours_array = {"red" , "red", "light blue" , "orange" , "purple" , "green" ,"green" , "white"};
@@ -99,8 +122,9 @@ void setup() {
 
   pinMode(D1, OUTPUT);
   pinMode(D2, OUTPUT);
+
+  
   led.setpin(13);
-  //setBalance();
   readFromEEPROM();
   delay(4000);
 
@@ -108,28 +132,29 @@ void setup() {
 
 void loop() {
 
+  if(!colour_sense){
 
-if(!colour_sense){
-
-readColourSensor();
-  Serial.println(currentColour[0]);
-   Serial.println(currentColour[1]);
+    readColourSensor();
+    Serial.println(currentColour[0]);
+    Serial.println(currentColour[1]);
     Serial.println(currentColour[2]);
     Serial.println(Colour_calc(currentColour[0],currentColour[1],currentColour[2]));
-  //playMissionImpossible();
-  //delay(10000);
 
-}else{
+  }else{
 
-  move_forward(motor_deviation());
-  //motor_deviation();
-  if(sense_black_strip() == true){
-    stop();
-    readColourSensor();
-    turn_function();
+    //start_time = micros();
+    move_forward(motor_deviation());
+    //motor_deviation();
+    if(sense_black_strip()){
+      delay(5);
+      stop();
+      readColourSensor();
+      //turn_function();
+      //reset();
+      new_turn_function();
+    }
+    //end_time = micros();
+    delay(4);
   }
-  delay(4);
-
-}
-
+   
 }

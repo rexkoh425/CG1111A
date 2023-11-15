@@ -49,11 +49,8 @@ void readColourSensor()
 
     digitalWrite(D1, LOW);
     digitalWrite(D2, LOW);
-    delay(RGBWait);
+    //delay(RGBWait/4);
   }
-  led.setColor(currentColour[0], currentColour[1], currentColour[2]);
-  led.show();
-  
   // runs the following code if DEBUG_COLOUR is #defined 
   #ifndef DEBUG_COLOUR
     Serial.print("Current colour ");
@@ -149,40 +146,39 @@ char *Colour_calc(int red, int green, int blue)
   return "black";
  }
 
- if(red > green){
+ if(red > green && red > 220){
 
-    if(green > blue)
-    {
-      if(green > 180)
-      {
-        led.setColor(255, 165, 0);
-        led.show();
-        return "orange";
-      }
-      led.setColor(255, 0, 0);
-      led.show();
-      return "red";
-    }
+  if(green > 180)
+  {
+    led.setColor(255, 165, 0);
+    led.show();
+    return "orange";
+  }
+  led.setColor(255, 0, 0);
+  led.show();
+  return "red";
+   
  }
 
-  if(blue > green){
+if(blue > green){
 
-    float ratio = (float) red / (float) blue;
-    //Serial.println(ratio);
-    if (ratio > float(0.9))
-    {
-      led.setColor(255, 0, 255);
-      led.show();
-      return "purple";
-    }
-    led.setColor(0, 0, 255);
+  float ratio = (float) red / (float) blue;
+  Serial.println(ratio);
+  if (ratio > 0.75)
+  {
+    led.setColor(255, 0, 255);
     led.show();
-    return "blue";
+    return "purple";
   }
+  led.setColor(0, 0, 255);
+  led.show();
+  return "blue";
+}
   led.setColor(0, 255, 0);
   led.show();
   return "green";
 }
+
 
 bool sense_black_strip() {
 

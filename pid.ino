@@ -45,10 +45,10 @@ int motor_deviation(){
    
   float error = dist_from_wall - MID_POINT ;
   float change_in_error = error - previous_error;
-  float total_error = (Kp*error +  Kd * (change_in_error))/factor;  // actual
+  float total_error = Kp * error +  Kd * (change_in_error);
   previous_error = error;
 
-  if(dist_from_wall <= 0 || dist_from_wall > 14.0){
+  if(dist_from_wall <= 0 || dist_from_wall > 15.0){
 
     previous_error = 0.0;
     return 0;
@@ -74,6 +74,43 @@ void move_forward(int error) {
   
 }
 
+float filter_dist(float dist){
+
+  float filtered_dist = 0 ;
+  float ratio = 0.05;//current weightage
+  
+  if(abs(dist - previous_filtered_dist) > 2.0){//was2.5
+
+    filtered_dist = dist;
+
+  }else{
+
+    filtered_dist = (1-ratio) * previous_filtered_dist + ratio * dist;
+  
+  } 
+
+  previous_filtered_dist = filtered_dist;
+  return filtered_dist;
+  
+}
+
+void reset(){
+
+  previous_error = 0.0 ;
+  previous_filtered_dist = 0.0;
+  
+}
+
+void delay_pid(int delay_ms){
+
+  int loop_num = delay_ms / loop_time_ms ;
+
+  for(int i = 1 ; i <= loop_num ; i += 1){
+    move_forward(motor_deviation());
+    delay(4);
+  }
+
+}
 
 
 
