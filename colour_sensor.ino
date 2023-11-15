@@ -101,7 +101,7 @@ char *Colour_calc(int red, int green, int blue)
   return "white";
  }
 
- if (red < 80 && green < 80 && blue < 80)
+ if (red < 100 && green < 100 && blue < 100)
  {
   return "black";
  }
@@ -124,7 +124,7 @@ if(blue > green){
 
   float ratio = (float) red / (float) blue;
   Serial.println(ratio);
-  if (ratio > 0.75)
+  if (ratio > 0.90)
   {
     led.setColor(255, 0, 255);
     led.show();
