@@ -60,13 +60,11 @@ MeDCMotor left_motor(M1);
 MeDCMotor right_motor(M2);
 
 #define turning_speed 255 //added all the variables compared to week 12-2
-const long unsigned int LEFT_ANGLE_MS = 330;
-const long unsigned int SECOND_LEFT_ANGLE_MS = 400;
-const long unsigned int RIGHT_ANGLE_MS = 280;
-const long unsigned int SECOND_RIGHT_ANGLE_MS = 320;
+const long unsigned int LEFT_ANGLE_MS = 350;
+const long unsigned int RIGHT_ANGLE_MS = 300;
 const long unsigned int U_TURN_MS = 585;
-const long unsigned int DOUBLE_TURN_STRAIGHT_LEFT_MS = 740;// from 760
-const long unsigned int DOUBLE_TURN_STRAIGHT_RIGHT_MS = 550;//was 640
+const long unsigned int DOUBLE_TURN_STRAIGHT_LEFT_MS = 425;
+const long unsigned int DOUBLE_TURN_STRAIGHT_RIGHT_MS = 355;
 //
 //PID
 #define TIMEOUT 2000   //to adjust timeout     
@@ -132,7 +130,7 @@ void setup() {
 
 void loop() {
 
-  if(!colour_sense){
+  if(colour_sense){
 
     readColourSensor();
     Serial.println(currentColour[0]);
@@ -152,6 +150,7 @@ void loop() {
       //turn_function();
       //reset();
       new_turn_function();
+      reset();
     }
     //end_time = micros();
     delay(4);
