@@ -1,102 +1,95 @@
+void turn_left(){
+ 
+ right_motor.run(turning_speed + RIGHT_DEVIATION);
+ left_motor.run(turning_speed - LEFT_DEVIATION);
+ delay(LEFT_ANGLE_MS);
+ //left_motor.run(0);
+}
 
-void turn(char* direction){
+void turn_right(){
+ 
+ 
+ left_motor.run(-turning_speed + LEFT_DEVIATION);
+ right_motor.run(-turning_speed - RIGHT_DEVIATION);
+ delay(RIGHT_ANGLE_MS);
+ //right_motor.run(0);
 
-  if (direction == "left") {
-    for (int turn_speed = 0; turn_speed <= 205; turn_speed += 1)
-    {
-    left_motor.run(turn_speed);
-    right_motor.run(turn_speed);
-    delay(2);
-    }
-    for (int turn_speed = 205; turn_speed >= 0; turn_speed -= 1)
-    {
-    left_motor.run(turn_speed);
-    right_motor.run(turn_speed);
-    delay(2);
-    }
+}
+
+void u_turn(){
+ 
+ left_motor.run(turning_speed - LEFT_DEVIATION);
+ right_motor.run(turning_speed + RIGHT_DEVIATION);
+ delay(U_TURN_MS);
+ //right_motor.run(0);
+
+}
+
+
+void double_left_turn(){
+  
+  right_motor.run(turning_speed + RIGHT_DEVIATION);
+  left_motor.run(turning_speed - LEFT_DEVIATION);
+  delay(LEFT_ANGLE_MS);
+  delay_pid(DOUBLE_TURN_STRAIGHT_LEFT_MS);
+
+  for (int i = turning_speed; i >= -turning_speed/1.5; i -= 10)
+  {
+  right_motor.run(turning_speed + RIGHT_DEVIATION);
+  left_motor.run(-i - LEFT_DEVIATION);
+  delay(17);
   }
-  else if(direction == "right"){
-    for (int turn_speed = 0; turn_speed <= 205; turn_speed += 1)
-    {
-    left_motor.run(-turn_speed);
-    right_motor.run(-turn_speed);
-    delay(2);
-    }
-    for (int turn_speed = 205; turn_speed >= 0; turn_speed -= 1)
-    {
-    left_motor.run(-turn_speed);
-    right_motor.run(-turn_speed);
-    delay(2);
-    }
-  }else {//u turn
-    for (int turn_speed = 0; turn_speed <= 210; turn_speed += 1)
-    {
-    left_motor.run(turn_speed);
-    right_motor.run(turn_speed);
-    delay(4);
-    }
-    for (int turn_speed = 210; turn_speed >= 0; turn_speed -= 1)
-    {
-    left_motor.run(turn_speed);
-    right_motor.run(turn_speed);
-    delay(4);
-    }
+}
+
+void double_right_turn(){
+  
+  left_motor.run(-turning_speed + LEFT_DEVIATION);
+  right_motor.run(-turning_speed - RIGHT_DEVIATION);
+  delay(RIGHT_ANGLE_MS);
+  delay_pid(DOUBLE_TURN_STRAIGHT_RIGHT_MS);
+  for (int i = turning_speed; i >= -turning_speed/1.5; i -= 10)
+  {
+  left_motor.run(-turning_speed + LEFT_DEVIATION);
+  right_motor.run(i - RIGHT_DEVIATION);
+  delay(15);
   }
 }
 
 void stop()
 {
-	left_motor.run(0);
+  left_motor.run(0);
   right_motor.run(0);
 }
 
-void turn_function()
+void new_turn_function()
 {
   char *colour = Colour_calc(currentColour[0],currentColour[1],currentColour[2]);
   
-  if (colour == "red")
-  {
+  if (colour == "red"){
+    
+   turn_left();
 
-	turn("left");
+  }else if (colour == "green") {
 
-  } else if (colour == "green") {
-
-	turn("right");
+   turn_right();
 
   } else if (colour == "orange") {
 
-	turn(180);
+   u_turn();
 
   } else if (colour == "purple") {
-
   
-	turn("left");
-	left_motor.run(-MOVE_SPEED);
-  right_motor.run(MOVE_SPEED);
-	delay(2000);
-	turn("left");
+   double_left_turn();
+
+  } else if (colour == "blue") {  // Test 230 for blue 
+
+   double_right_turn();
+
+  } else if (colour == "white") {
+
+   stop();
+   playMissionImpossible();
+   delay(10000);
    
-
-  } else if (colour == "light blue") {
-
-    
-	turn("right");
-	left_motor.run(MOVE_SPEED);
-  right_motor.run(MOVE_SPEED);
-	delay(2000);
-	turn("right");
-  
-
-  } else {
-
-  stop();
-	//play_victory_tune();
-	delay(10000);
-  
   }
-
-  delay(1000);//stop after turn 
 }
-
-
-
