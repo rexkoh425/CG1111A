@@ -5,13 +5,13 @@ float get_ultrasonic_distance() {
   
   digitalWrite(ULTRASONIC, LOW);
   delayMicroseconds(10);
-  digitalWrite(ULTRASONIC, HIGH);
+  digitalWrite(ULTRASONIC, HIGH); //sends a pulse after 10 us of power
   delayMicroseconds(10);
   digitalWrite(ULTRASONIC, LOW);
 
   pinMode(ULTRASONIC, INPUT);
   
-  long duration = pulseIn(ULTRASONIC, HIGH, TIMEOUT); // in microseconds
+  long duration = pulseIn(ULTRASONIC, HIGH, TIMEOUT); // returns the duration between sending and receiving back the pulse in microseconds
 
   float conversion = 100.0 / 1000000.0;  //1 meter = 100 cm ; 1 second = 1000000 microseconds
   float distance_cm = duration * SPEED_OF_SOUND * 0.5 * conversion;
@@ -101,7 +101,7 @@ void reset(){
 /* a function that apply PID for a certain period of time and also acts as a delay */
 void delay_pid(int delay_ms){
 
-  int loop_num = delay_ms / loop_time_ms ; // loop_time is the time required for 1 loop
+  int loop_num = delay_ms / loop_time_ms ; // loop_time_ms is the time required for 1 loop in ms
 
   for(int i = 1 ; i <= loop_num ; i += 1){ //looping 4 times would be eqivalent to a 20ms delay
     move_forward(motor_deviation());
