@@ -42,21 +42,24 @@ void readColourSensor()
 {
   for (int c = 0; c < 3; c++) // from RED to BLUE
   {
+    // turn on LED
     digitalWrite(D1, ledPins[c][0]);
     digitalWrite(D2, ledPins[c][1]);
     delay(RGBWait);
 
-    currentColour[c] = getLDRReadings();
-    currentColour[c] = ((float) (currentColour[c] - balance[BLACK][c])) / (float) balance[GREY][c] * 255.0;
+    currentColour[c] = getLDRReadings(); // gets reading from LDR
+    currentColour[c] = ((float) (currentColour[c] - balance[BLACK][c])) / (float) balance[GREY][c] * 255.0; // converts reading to value in 0 - 255 range
     
     // prevent negative values
     if (currentColour[c] < 0) currentColour[c] = 1;
 
+    // turns LED off
     digitalWrite(D1, LOW);
     digitalWrite(D2, LOW);
-    //delay(RGBWait/4);
   }
+  
   // runs the following code if DEBUG_COLOUR is #defined 
+  // prints RGB values 
   #ifndef DEBUG_COLOUR
     Serial.print("Current colour ");
     for (int i = 0; i < 3; i++)
@@ -86,56 +89,59 @@ int getLDRReadings()
 
 // takes RGB values as input and returns colour matched as String
 // flashes colour sensed on mBot in-built LEDs
-char *Colour_calc(int red, int green, int blue) 
-{
- if (red > 210 && green > 210 && blue > 210)
- {
-  led.setColor(255, 255, 255);
-  led.show();
-  return "white";
+char *Colour_calc(int red, int green, int blue){
+ 
+  if (red > 210 && green > 210 && blue > 210){
+  
+   led.setColor(255, 255, 255);
+   led.show();
+   return "white";
  }
 
- if (red < 80 && green < 80 && blue < 80)
- {
-  return "black";
+ if (red < 80 && green < 80 && blue < 80){
+  
+   return "black";
  }
 
  if(red > green && red > 220){
 
   if(green > ORANGE_GREEN_THRESHOLD)
   {
+   // red > 220, green > ORANGE_GREEN_THRESHOLD
     led.setColor(255, 165, 0);
     led.show();
     led.setColor(0, 0, 0);
     led.show();
     return "orange";
   }
+
+  // red > 220, green < ORANGE_GREEN_THRESHOLD
   led.setColor(255, 0, 0);
   led.show();
   led.setColor(0, 0, 0);
   led.show();
   return "red";
-   
  }
 
-if(blue > green){
-
-  float ratio = (float) red / (float) blue;
-  //Serial.println(ratio);
-  if (ratio > RED_BLUE_RATIO)
-  {
-    led.setColor(255, 0, 255);
+  if(blue > green){
+  
+    float ratio = (float) red / (float) blue;
+    if (ratio > RED_BLUE_RATIO)
+    {
+      led.setColor(255, 0, 255);
+      led.show();
+      led.setColor(0, 0, 0);
+      led.show();
+      return "purple";
+    }
+    led.setColor(0, 0, 255);
     led.show();
     led.setColor(0, 0, 0);
     led.show();
-    return "purple";
+    return "blue";
   }
-  led.setColor(0, 0, 255);
-  led.show();
-  led.setColor(0, 0, 0);
-  led.show();
-  return "blue";
-}
+
+  // red < green && blue < green
   led.setColor(0, 255, 0);
   led.show();
   led.setColor(0, 0, 0);
