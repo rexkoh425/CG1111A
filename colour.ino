@@ -1,5 +1,5 @@
-#define ORANGE_GREEN_THRESHOLD 180
-#define RED_BLUE_RATIO 0.85
+#define ORANGE_GREEN_THRESHOLD 180 // to differentiate between orange and red
+#define RED_BLUE_RATIO 0.85 // to differentiate between purple and blue
 
 // to be called at setup
 // retrieves balance values from internal memory of mBot
