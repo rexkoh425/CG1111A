@@ -143,6 +143,21 @@ if(blue > green){
   return "green";
 }
 
+#define IRPin 1
+#define IRWait 10
+
+// reads average readings from IR sensor
+int getIRdistance()
+{
+  int total = 0;
+  for (int i = 0; i < NUM_AVG_READS; i++)
+  {
+    total += analogRead(IRPin);
+    delay(IRWait);
+  }
+  return total / NUM_AVG_READS;
+}
+
 // senses if mBot has reached black strip
 bool sense_black_strip() {
 
