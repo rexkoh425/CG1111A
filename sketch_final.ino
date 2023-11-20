@@ -1,29 +1,22 @@
 #include <MeEEPROM.h>
 #include <MeMCore.h>
 
-/* possible improvements to timing
-
-add ir sensor to sense colour b4 sensing black strip
-decrease rgb wait of turning off rgb e.g the second rgb in the readcolour function
-increase turn speed / moving speed
-
-*/
-//colour sensor
+//colour sensor values / initialisation
 #define WHITE 0
 #define BLACK 1
 #define GREY 2
 
-#define RGBWait 100
-#define LDRWait 10
-#define NUM_AVG_READS 5
-#define COUNTDOWN 5
+#define RGBWait 100 //wait time before the RGB LED to stabilise before reading from the LDR
+#define LDRWait 10 // wait time between each time reading the LDR
+#define NUM_AVG_READS 5 // number of reading taken for each R ,G and B
+#define COUNTDOWN 5 // use in calibration
 
-#define LDR 0
+#define LDR 0  // LDR Pin
 
-#define D1 A2 
-#define D2 A3
+#define D1 A2 // 2-to-4 decoder 1A select input
+#define D2 A3 // 2-to-4 decoder 1B select input
 
-//#define DEBUG_COLOUR // to remove when runnning actual
+//#define DEBUG_COLOUR
 
 int balance[3][3] =
 {
@@ -59,7 +52,7 @@ MeLineFollower lineFinder(PORT_2); // assigning lineFinder to RJ25 port 2
 MeDCMotor left_motor(M1);
 MeDCMotor right_motor(M2);
 
-#define turning_speed 255 //added all the variables compared to week 12-2
+#define turning_speed 255 
 const long unsigned int LEFT_ANGLE_MS = 350;
 const long unsigned int RIGHT_ANGLE_MS = 300;
 const long unsigned int U_TURN_MS = 585;
@@ -67,21 +60,21 @@ const long unsigned int DOUBLE_TURN_STRAIGHT_LEFT_MS = 425;
 const long unsigned int DOUBLE_TURN_STRAIGHT_RIGHT_MS = 355;
 //
 //PID
-#define TIMEOUT 2000   //to adjust timeout     
-#define SPEED_OF_SOUND 340  
-#define ULTRASONIC 12
+#define TIMEOUT 2000         // Ultrasonic sensor will return 0 if nothing is detected after this amount of time    
+#define SPEED_OF_SOUND 340   // Speed of sound used in calculating distance using time
+#define ULTRASONIC 12        // Ultrasonic sensor port
 
-#define MOVE_SPEED 255
-#define LEFT_DEVIATION 2
-#define RIGHT_DEVIATION 0 
+#define MOVE_SPEED 255       // Speed at which the motors will be running when moving forward
+#define LEFT_DEVIATION 2     // Left motor is slowed down by 2 as robot moves towards the right when set to the same speed in code
+#define RIGHT_DEVIATION 0    // Right motor remains the same
 
-const float Kp = 20.0;//was 20               
-const float Kd = 700.0;//was500
-const float MID_POINT = 7.0;
+const float Kp = 20.0;       // Proportionality Constant for P term              
+const float Kd = 700.0;      // Proportionality Constant for D term 
+const float MID_POINT = 7.0; // Distance from the ultrasonic sensor to the wall when the robot in the center
 float previous_error = 0.0;
-float previous_filtered_dist = 0.0;//was 0
+float previous_filtered_dist = 0.0;
 
-const int loop_time_ms = 5;
+const int loop_time_ms = 5;  // Time taken in ms for 1 loop which includes PID + 4ms delay
 //
 
 //music
@@ -104,23 +97,12 @@ int delay_54 = 20 * beat;//was 20
 int delay_44 = 16 * beat;
 //
 
-//debug
-bool colour_sense = true;
-int start_time = 0;
-int end_time = 0;
-//
-
-
-//int k = 0 ; 
-//char** colours_array = {"red" , "red", "light blue" , "orange" , "purple" , "green" ,"green" , "white"};
-
 void setup() {
 
   //Serial.begin(9600);
 
   pinMode(D1, OUTPUT);
   pinMode(D2, OUTPUT);
-
   
   led.setpin(13);
   readFromEEPROM();
@@ -130,21 +112,14 @@ void setup() {
 
 void loop() {
 
- 
-    //start_time = micros();
-    move_forward(motor_deviation());// 255 221 189
-    //motor_deviation();
-    if(sense_black_strip()){
-      delay(5);
-      stop();
-      readColourSensor();
-      //turn_function();
-      //reset();
-      new_turn_function();
-      reset();
-    }
-    //end_time = micros();
-    delay(4);
-
-   
+  move_forward(motor_deviation()); //PID algorithm --> move straight by applying the necessary corrections
+    
+  if(sense_black_strip()){
+    delay(5);//delay 5ms after sensing the black strip to move forward a little more thus the robot will align with the PID better after turning
+    stop(); // sets motor speed to 0
+    readColourSensor(); //reads paper colour and inputs the colour read into a global array of R,G,B
+    new_turn_function(); // reads the R,G,B array and turns according to the colour
+    reset(); // resets previous_error and previous_filtered_dist
+  }
+  delay(4); 
 }
