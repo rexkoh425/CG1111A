@@ -1,5 +1,5 @@
 
-
+/* plays our ending music --> Mission Impossible Theme Song */
 void playMissionImpossible()
 {
   for (int j = 0; j < 2; j++)
