@@ -117,12 +117,12 @@ void loop() {
 
   move_forward(motor_deviation()); //PID algorithm --> move straight by applying the necessary corrections
     
-  if(sense_black_strip()){
-    delay(5);//delay 5ms after sensing the black strip to move forward a little more thus the robot will align with the PID better after turning
-    stop(); // sets motor speed to 0
-    readColourSensor(); //reads paper colour and inputs the colour read into a global array of R,G,B
-    new_turn_function(); // reads the R,G,B array and turns according to the colour
-    reset(); // resets previous_error and previous_filtered_dist
+  if(sense_black_strip()){ // Returns true if line sensor senses the black strip
+    delay(5);              // Delay 5ms after sensing the black strip to move forward a little more thus the robot will align with the PID better after turning
+    stop();                // Sets motor speed to 0
+    readColourSensor();    // Reads paper colour and inputs the colour read into a global array of R,G,B
+    new_turn_function();   // Reads the R,G,B array and turns according to the colour
+    reset();               // Resets previous_error and previous_filtered_dist
   }
   delay(4); 
 }
