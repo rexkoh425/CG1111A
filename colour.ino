@@ -1,6 +1,8 @@
 #define ORANGE_GREEN_THRESHOLD 180
 #define RED_BLUE_RATIO 0.85
+
 // to be called at setup
+// retrieves balance values from internal memory of mBot
 void readFromEEPROM()
 {
   int eeAddress = 0;
@@ -34,6 +36,8 @@ void readFromEEPROM()
   }
 }
 
+// turns on LED, gets LDR readings, converts to 0-255 range, and turns off LED
+// repeats 2 more times to retrieve colour values for R, G and B
 void readColourSensor()
 {
   for (int c = 0; c < 3; c++) // from RED to BLUE
@@ -42,7 +46,7 @@ void readColourSensor()
     digitalWrite(D2, ledPins[c][1]);
     delay(RGBWait);
 
-    currentColour[c] = getAvg();
+    currentColour[c] = getLDRReadings();
     currentColour[c] = ((float) (currentColour[c] - balance[BLACK][c])) / (float) balance[GREY][c] * 255.0;
     
     // prevent negative values
@@ -64,7 +68,9 @@ void readColourSensor()
   #endif
 }
 
-int getAvg()
+// reads values from LDR
+// called in readColourSensor()
+int getLDRReadings()
 {
   int total = 0;
 
@@ -133,6 +139,8 @@ void setBalance()
   Serial.println("\n");
 }
 
+// takes RGB values as input and returns colour matched as String
+// flashes colour sensed on mBot in-built LEDs
 char *Colour_calc(int red, int green, int blue) 
 {
  if (red > 210 && green > 210 && blue > 210)
@@ -190,7 +198,7 @@ if(blue > green){
   return "green";
 }
 
-
+// senses if mBot has reached black strip
 bool sense_black_strip() {
 
   int sensor_state = lineFinder.readSensors();
