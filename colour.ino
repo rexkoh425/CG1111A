@@ -143,9 +143,6 @@ if(blue > green){
   return "green";
 }
 
-#define IRPin 1
-#define IRWait 10
-
 // reads average readings from IR sensor
 int getIRdistance()
 {
