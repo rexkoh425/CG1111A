@@ -40,16 +40,6 @@ int ledPins[4][2] =
 // for showing colour on mBot LEDs
 MeRGBLed led(0,30);
 
-// colour compare
-#define white_limit 200 
-#define red_limit 125
-#define blue_limit 125
-#define green_limit 125
-
-int red = 255;
-int green = 0;
-int blue = 0;
-
 // IR Sensor 
 #define IRPin 1
 #define IRWait 10
