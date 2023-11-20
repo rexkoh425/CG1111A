@@ -3,17 +3,13 @@ void turn_left(){
  right_motor.run(turning_speed + RIGHT_DEVIATION);
  left_motor.run(turning_speed - LEFT_DEVIATION);
  delay(LEFT_ANGLE_MS);
- //left_motor.run(0);
 }
 
 void turn_right(){
  
- 
  left_motor.run(-turning_speed + LEFT_DEVIATION);
  right_motor.run(-turning_speed - RIGHT_DEVIATION);
  delay(RIGHT_ANGLE_MS);
- //right_motor.run(0);
-
 }
 
 void u_turn(){
@@ -21,8 +17,6 @@ void u_turn(){
  left_motor.run(turning_speed - LEFT_DEVIATION);
  right_motor.run(turning_speed + RIGHT_DEVIATION);
  delay(U_TURN_MS);
- //right_motor.run(0);
-
 }
 
 
