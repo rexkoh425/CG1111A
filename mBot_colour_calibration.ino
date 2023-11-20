@@ -1,12 +1,3 @@
-#define white_limit 200 
-#define red_limit 125
-#define blue_limit 125
-#define green_limit 125
-
-int red;
-int green;
-int blue;
-
 #include <EEPROM.h> //EEPROM used to hold values 
 #include <MeMCore.h>
 
@@ -22,7 +13,7 @@ int blue;
 #define COUNTDOWN 5
 
 #define LDR 0 //LDR sensor pin A0 [check with mBot]
-#define LED 13 //NOT SURE
+#define LED 13 
 
 // defining balance
 #define WHITE 0
