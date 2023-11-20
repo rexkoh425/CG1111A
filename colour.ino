@@ -84,61 +84,6 @@ int getLDRReadings()
   return total / NUM_AVG_READS;
 }
 
-void setBalance()
-{
-  String title[2] = { "White", "Black" };
-
-  for (int c = WHITE; c <= BLACK; c++) // from white to black
-  {
-    // instructions for calibration, prints countdown by lines
-    Serial.println("Put " + title[c] + " sample for calibration in: ");
-    for (int i = COUNTDOWN; i > 0; i--)
-    {
-      Serial.println(i);
-      delay(1000); 
-    }
-    Serial.println("");
-
-    // getting average RGB values
-    Serial.print(title[c] + ": ");
-    for (int i = 0; i < 3; i++) // from RED to BLUE
-    {
-      digitalWrite(D1, ledPins[i][0]);
-      digitalWrite(D2, ledPins[i][1]);
-      delay(RGBWait);
-
-      balance[c][i] = getAvg(); // saves avg RGB value to balance array
-
-      // LEDs off
-      digitalWrite(D1, LOW);
-      digitalWrite(D2, LOW);
-      delay(RGBWait);
-
-      Serial.print(balance[c][i]);
-
-      if (i < 2) // aesthetics
-      {
-        Serial.print(", ");
-      }
-    }
-    Serial.println("\n"); 
-  }
-
-  // finding GREY range (WHITE - BLACK)
-  Serial.print("GREY range: ");
-  for (int j = 0; j < 3; j++) // from RED to BLUE
-  {
-    balance[GREY][j] = balance[WHITE][j] - balance[BLACK][j];
-    Serial.print(balance[GREY][j]);
-
-    if (j < 2) // aesthetics
-    {
-      Serial.print(", ");
-    }
-  }
-  Serial.println("\n");
-}
-
 // takes RGB values as input and returns colour matched as String
 // flashes colour sensed on mBot in-built LEDs
 char *Colour_calc(int red, int green, int blue) 
