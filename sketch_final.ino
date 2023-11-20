@@ -47,6 +47,10 @@ int red = 255;
 int green = 0;
 int blue = 0;
 //
+//IR Sensor 
+#define IRPin 1
+#define IRWait 10
+//
 //turning
 MeLineFollower lineFinder(PORT_2); // assigning lineFinder to RJ25 port 2
 MeDCMotor left_motor(M1);
