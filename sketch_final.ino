@@ -53,15 +53,16 @@ int blue = 0;
 //
 //turning
 MeLineFollower lineFinder(PORT_2); // assigning lineFinder to RJ25 port 2
-MeDCMotor left_motor(M1);
-MeDCMotor right_motor(M2);
+MeDCMotor left_motor(M1);  // Left motor port
+MeDCMotor right_motor(M2); // Right motor port
 
-#define turning_speed 255 
-const long unsigned int LEFT_ANGLE_MS = 350;
-const long unsigned int RIGHT_ANGLE_MS = 300;
-const long unsigned int U_TURN_MS = 585;
-const long unsigned int DOUBLE_TURN_STRAIGHT_LEFT_MS = 425;
-const long unsigned int DOUBLE_TURN_STRAIGHT_RIGHT_MS = 355;
+/* hard-coded values for turning */
+#define turning_speed 255 //turning speed
+const long unsigned int LEFT_ANGLE_MS = 350; //Duration to turn left 90 deg 
+const long unsigned int RIGHT_ANGLE_MS = 300; //Duration to turn right 90 deg
+const long unsigned int U_TURN_MS = 585; //Duration to turn 180 deg
+const long unsigned int DOUBLE_TURN_STRAIGHT_LEFT_MS = 425; //Duration to move straight for double left turn
+const long unsigned int DOUBLE_TURN_STRAIGHT_RIGHT_MS = 355; //Duration to move straight for double right turn
 //
 //PID
 #define TIMEOUT 2000         // Ultrasonic sensor will return 0 if nothing is detected after this amount of time    
