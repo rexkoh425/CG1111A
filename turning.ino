@@ -29,7 +29,7 @@ void double_left_turn(){
   left_motor.run(turning_speed - LEFT_DEVIATION);
   delay(LEFT_ANGLE_MS);
   delay_pid(DOUBLE_TURN_STRAIGHT_LEFT_MS);
-
+  // Decelerate the left motor as it negotiates the turn
   for (int i = turning_speed; i >= -turning_speed/1.5; i -= 10)
   {
   right_motor.run(turning_speed + RIGHT_DEVIATION);
@@ -44,6 +44,7 @@ void double_right_turn(){
   right_motor.run(-turning_speed - RIGHT_DEVIATION);
   delay(RIGHT_ANGLE_MS);
   delay_pid(DOUBLE_TURN_STRAIGHT_RIGHT_MS);
+ // Decelerate the right motor as it negotiates the turn
   for (int i = turning_speed; i >= -turning_speed/1.5; i -= 10)
   {
   left_motor.run(-turning_speed + LEFT_DEVIATION);
