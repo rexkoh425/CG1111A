@@ -24,12 +24,16 @@ void u_turn(){
 
 
 void double_left_turn(){
-  
+ 
+  // First turn
   right_motor.run(turning_speed + RIGHT_DEVIATION);
   left_motor.run(turning_speed - LEFT_DEVIATION);
   delay(LEFT_ANGLE_MS);
+
+  // Move forward
   delay_pid(DOUBLE_TURN_STRAIGHT_LEFT_MS);
-  // Decelerate the left motor as it negotiates the turn
+ 
+  // Second turn --> decelerate the left motor as it negotiates the turn 
   for (int i = turning_speed; i >= -turning_speed/1.5; i -= 10)
   {
   right_motor.run(turning_speed + RIGHT_DEVIATION);
@@ -39,12 +43,16 @@ void double_left_turn(){
 }
 
 void double_right_turn(){
-  
+
+  //First turn
   left_motor.run(-turning_speed + LEFT_DEVIATION);
   right_motor.run(-turning_speed - RIGHT_DEVIATION);
   delay(RIGHT_ANGLE_MS);
+
+  // Move forward
   delay_pid(DOUBLE_TURN_STRAIGHT_RIGHT_MS);
- // Decelerate the right motor as it negotiates the turn
+ 
+  // Second turn --> decelerate the right motor as it negotiates the turn
   for (int i = turning_speed; i >= -turning_speed/1.5; i -= 10)
   {
   left_motor.run(-turning_speed + LEFT_DEVIATION);
@@ -59,9 +67,10 @@ void stop()
   right_motor.run(0);
 }
 
-// Function to execute corresponding movement action corresponding the colour detected by the colour sensor 
+/* Function to execute corresponding movement action corresponding the colour detected by the colour sensor */
 void new_turn_function()
 {
+  //currentColour is a global array which hold the R,G,B value of the sensed colour while Colour_calc outputs the colour base on the R,G,B values
   char *colour = Colour_calc(currentColour[0],currentColour[1],currentColour[2]);
   
   if (colour == "red"){
