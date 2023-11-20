@@ -202,38 +202,64 @@ int getLDRReading()
   return total / NUM_AVG_READS;
 }
 
-// colour matching function for testing
-char *Colour_calc(int red, int green, int blue) {
- if (red > 230 && green > 230 && blue > 230)
- {
-  return "white";
+// takes RGB values as input and returns colour matched as String
+// flashes colour sensed on mBot in-built LEDs
+char *Colour_calc(int red, int green, int blue){
+ 
+  if (red > 210 && green > 210 && blue > 210){
+  
+   led.setColor(255, 255, 255);
+   led.show();
+   return "white";
  }
 
- if (red < 50 && green < 50 && blue < 50)
- {
-  return "black";
+ if (red < 80 && green < 80 && blue < 80){
+  
+   return "black";
  }
- if(red > green){
 
-    if(green > blue){
+ if(red > green && red > 220){
 
-      if(green > 110 && blue > 110){
+  if(green > ORANGE_GREEN_THRESHOLD)
+  {
+   // red > 220, green > ORANGE_GREEN_THRESHOLD
+    led.setColor(255, 165, 0);
+    led.show();
+    led.setColor(0, 0, 0);
+    led.show();
+    return "orange";
+  }
 
-        return "orange";
-      }
-      return "red";
+  // red > 220, green < ORANGE_GREEN_THRESHOLD
+  led.setColor(255, 0, 0);
+  led.show();
+  led.setColor(0, 0, 0);
+  led.show();
+  return "red";
+ }
 
-    }else{
-
+  if(blue > green){
+  
+    float ratio = (float) red / (float) blue;
+    if (ratio > RED_BLUE_RATIO)
+    {
+      led.setColor(255, 0, 255);
+      led.show();
+      led.setColor(0, 0, 0);
+      led.show();
       return "purple";
     }
-
-  }else if(blue > green){
-
-      return "blue";
-
-  }else{
-
-    return "green";
+    led.setColor(0, 0, 255);
+    led.show();
+    led.setColor(0, 0, 0);
+    led.show();
+    return "blue";
   }
+
+  // red < green && blue < green
+  led.setColor(0, 255, 0);
+  led.show();
+  led.setColor(0, 0, 0);
+  led.show();
+  return "green";
 }
