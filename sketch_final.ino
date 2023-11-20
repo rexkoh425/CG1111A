@@ -114,7 +114,7 @@ void loop() {
     stop();                // Sets motor speed to 0
     readColourSensor();    // Reads paper colour and inputs the colour read into a global array of R,G,B
     new_turn_function();   // Reads the R,G,B array and turns according to the colour
-    reset();               // Resets previous_error and previous_filtered_dist
+    reset();               // Resets previous_error and previous_filtered_dist to 0
   }
   delay(4); 
 }
