@@ -18,6 +18,7 @@
 
 //#define DEBUG_COLOUR
 
+// to call as balance values when calculating RGB values
 int balance[3][3] =
 {
   {0, 0, 0},  // White
@@ -25,6 +26,7 @@ int balance[3][3] =
   {0, 0, 0}   // Grey
 };
 
+// to save RGB values of detected colour
 int currentColour[3] = {0, 0, 0};
 
 int ledPins[4][2] =
@@ -32,12 +34,13 @@ int ledPins[4][2] =
   { HIGH, HIGH },   // Red LED
   { LOW,  HIGH },   // Green LED
   { HIGH, LOW  },   // Blue LED
-  { LOW,  LOW  }    // NIL (by right for IR sensor) (used as OFF)
+  { LOW,  LOW  }    // IR sensor
 };
 
+// for showing colour on mBot LEDs
 MeRGBLed led(0,30);
-//
-//colour compare
+
+// colour compare
 #define white_limit 200 
 #define red_limit 125
 #define blue_limit 125
@@ -46,23 +49,23 @@ MeRGBLed led(0,30);
 int red = 255;
 int green = 0;
 int blue = 0;
-//
-//IR Sensor 
+
+// IR Sensor 
 #define IRPin 1
 #define IRWait 10
-//
-//turning
+
+// turning
 MeLineFollower lineFinder(PORT_2); // assigning lineFinder to RJ25 port 2
-MeDCMotor left_motor(M1);  // Left motor port
-MeDCMotor right_motor(M2); // Right motor port
+MeDCMotor left_motor(M1);          // Left motor port
+MeDCMotor right_motor(M2);         // Right motor port
 
 /* hard-coded values for turning */
 #define turning_speed 255 //turning speed
-const long unsigned int LEFT_ANGLE_MS = 350; //Duration to turn left 90 deg 
-const long unsigned int RIGHT_ANGLE_MS = 300; //Duration to turn right 90 deg
-const long unsigned int U_TURN_MS = 585; //Duration to turn 180 deg
-const long unsigned int DOUBLE_TURN_STRAIGHT_LEFT_MS = 425; //Duration to move straight for double left turn
-const long unsigned int DOUBLE_TURN_STRAIGHT_RIGHT_MS = 355; //Duration to move straight for double right turn
+const long unsigned int LEFT_ANGLE_MS = 350;                 // Duration to turn left 90 deg 
+const long unsigned int RIGHT_ANGLE_MS = 300;                // Duration to turn right 90 deg
+const long unsigned int U_TURN_MS = 585;                     // Duration to turn 180 deg
+const long unsigned int DOUBLE_TURN_STRAIGHT_LEFT_MS = 425;  // Duration to move straight for double left turn
+const long unsigned int DOUBLE_TURN_STRAIGHT_RIGHT_MS = 355; // Duration to move straight for double right turn
 //
 //PID
 #define TIMEOUT 2000         // Ultrasonic sensor will return 0 if nothing is detected after this amount of time    
@@ -80,11 +83,10 @@ float previous_error = 0.0;
 float previous_filtered_dist = 0.0;
 
 const int loop_time_ms = 5;  // Time taken in ms for 1 loop which includes PID + 4ms delay
-//
+
 
 //music
 MeBuzzer buzzer;
-
 
 int verse1[] = {785, 785, 932, 1047, 785, 785, 698, 740};
 int verse2[] = {523, 523, 622, 698, 523, 523, 466, 494};
