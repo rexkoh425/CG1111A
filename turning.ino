@@ -1,3 +1,6 @@
+/* Following are the functions to control the movement of the 
+// mBot once it reaches a waypoint
+*/
 void turn_left(){
  
  right_motor.run(turning_speed + RIGHT_DEVIATION);
@@ -55,6 +58,7 @@ void stop()
   right_motor.run(0);
 }
 
+// Function to execute corresponding movement action corresponding the colour detected by the colour sensor 
 void new_turn_function()
 {
   char *colour = Colour_calc(currentColour[0],currentColour[1],currentColour[2]);
@@ -75,7 +79,7 @@ void new_turn_function()
   
    double_left_turn();
 
-  } else if (colour == "blue") {  // Test 230 for blue 
+  } else if (colour == "blue") {  
 
    double_right_turn();
 
