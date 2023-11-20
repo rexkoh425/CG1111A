@@ -84,11 +84,9 @@ const int loop_time_ms = 5;  // Time taken in ms for 1 loop which includes PID +
 //music
 MeBuzzer buzzer;
 
-// verse 1= {G5, G5, A#5,C6, G5, G5, F5, F#5} total 16
+
 int verse1[] = {785, 785, 932, 1047, 785, 785, 698, 740};
-//verse2= {C5, C5, D#5, F5, C5, C5, A#4, B4 } total 16
 int verse2[] = {523, 523, 622, 698, 523, 523, 466, 494};
-//verse3={A#5, G5, D5, A#5, G5, C#5, A#5, G5, C5, A#4, C5, 0, D#5, C5, G5, D#5, C5, F#5, D#5, C5, F5, D#5, F5 } total 44, 22 per iteration
 int verse3[] = {932, 785, 587, 932, 785, 554, 587, 785, 523, 466, 523};
 int verse4[] = {622, 523, 785, 622, 523, 740, 622, 523, 698, 622, 698};
 
