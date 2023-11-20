@@ -74,8 +74,7 @@ void move_forward(int error) {
 float filter_dist(float dist){
 
   float filtered_dist = 0 ;
-  float ratio = 0.05;//current weightage
-
+  float ratio = 0.05; //how much of the current dist will be considered
   
   if(abs(dist - previous_filtered_dist) > 2.0){   //account for the sudden change when there is no wall or large changes. Raw value make it responsive to current changes.  
 
