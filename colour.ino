@@ -2,7 +2,7 @@
 #define RED_BLUE_RATIO 0.85 // to differentiate between purple and blue
 
 // to be called at setup
-// retrieves balance values from internal memory of mBot
+// retrieves White, Black and Grey values from internal memory of mBot for calibration
 void readFromEEPROM()
 {
   int eeAddress = 0;
