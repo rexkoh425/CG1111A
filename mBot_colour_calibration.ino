@@ -16,6 +16,9 @@
 // LDR sensor pin A0 
 #define LDR 0
 
+//LED pin
+MeRGBLed led(0,30);
+
 // countdown before taking calibration readings
 #define COUNTDOWN 5
 
@@ -44,6 +47,9 @@ int balance[3][3] =
   {0, 0, 0},  // Black
   {0, 0, 0}   // Grey
 };
+
+#define ORANGE_GREEN_THRESHOLD 180 // to differentiate between orange and red
+#define RED_BLUE_RATIO 0.85 // to differentiate between purple and blue
 
 void setup() 
 {
